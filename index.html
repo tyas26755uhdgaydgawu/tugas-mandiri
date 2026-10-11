@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Debug Day 2026: seminar dan workshop web development untuk mahasiswa, diselenggarakan oleh UKM Himpunan Informatika.">
+  <title>Debug Day 2026 | Seminar &amp; Workshop Web Development</title>
+
+  <!-- Font: Bricolage Grotesque (judul) + Figtree (isi). Ada fallback jika offline. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       1. DESIGN TOKENS: palet warna, tipografi, jarak
+       ============================================================ */
+    :root {
+      /* Palet warna (terang) */
+      --bg: #F6F6F1;
+      --surface: #FFFFFF;
+      --ink: #16193A;
+      --muted: #565A78;
+      --primary: #3B4BDB;
+      --on-primary: #FFFFFF;
+      --accent: #FFB703;
+      --on-accent: #16193A;
+      --line: #DCDDE6;
+      --danger: #B3261E;
+      --success: #1B7F4B;
+
+      /* Tipografi */
+      --font-head: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+      --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+
+      /* Skala ukuran teks */
+      --text-sm: 0.9rem;
+      --text-base: 1.05rem;
+      --text-lg: 1.25rem;
+      --text-xl: clamp(1.6rem, 3vw, 2.2rem);
+      --text-hero: clamp(2.6rem, 8vw, 5.2rem);
+
+      /* Jarak & bentuk */
+      --space: 1rem;
+      --section-y: clamp(3.5rem, 8vw, 6rem);
+      --radius: 14px;
+      --radius-sm: 8px;
+      --maxw: 1080px;
+    }
+
+    /* Palet warna (gelap), diaktifkan lewat tombol toggle */
+    [data-theme="dark"] {
+      --bg: #11132B;
+      --surface: #1B1E3F;
+      --ink: #EEF0FF;
+      --muted: #A7ABCB;
+      --primary: #939DFF;
+      --on-primary: #11132B;
+      --accent: #FFC933;
+      --on-accent: #11132B;
+      --line: #2E3262;
+      --danger: #FF8A80;
+      --success: #6FD9A0;
+    }
+
+    /* ============================================================
+       2. RESET & DASAR
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.65;
+      color: var(--ink);
+      background: var(--bg);
+      transition: background-color .25s, color .25s;
+    }
+    img { max-width: 100%; display: block; }
+    h1, h2, h3 { font-family: var(--font-head); line-height: 1.1; margin: 0 0 .6em; }
+    h2 { font-size: var(--text-xl); font-weight: 800; letter-spacing: -0.01em; }
+    h3 { font-size: var(--text-lg); font-weight: 600; }
+    p { margin: 0 0 1em; max-width: 62ch; }
+    a { color: var(--primary); }
+
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+    .container { width: min(100% - 2rem, var(--maxw)); margin-inline: auto; }
+    section { padding-block: var(--section-y); }
+    .section-intro { color: var(--muted); margin-bottom: 2rem; }
+    .skip-link {
+      position: absolute; left: -999px; top: 0; background: var(--accent);
+      color: var(--on-accent); padding: .6rem 1rem; z-index: 100;
+    }
+    .skip-link:focus { left: 0; }
+
+    /* ============================================================
+       3. KOMPONEN: tombol
+       ============================================================ */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font: 700 var(--text-base)/1 var(--font-body);
+      padding: .9rem 1.4rem; border-radius: var(--radius-sm);
+      border: 2px solid transparent; cursor: pointer; text-decoration: none;
+      transition: transform .15s, background-color .2s;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--primary); color: var(--on-primary); }
+    .btn-primary:hover { filter: brightness(1.08); }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-outline { background: transparent; color: var(--ink); border-color: var(--line); }
+    .btn-outline:hover { border-color: var(--primary); }
+
+    /* ============================================================
+       4. HEADER & NAVIGASI (Flexbox)
+       ============================================================ */
+    .site-header {
+      position: sticky; top: 0; z-index: 50;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; padding-block: .75rem;
+    }
+    .brand {
+      display: flex; align-items: center; gap: .6rem;
+      font-family: var(--font-head); font-weight: 800; font-size: 1.2rem;
+      color: var(--ink); text-decoration: none;
+    }
+    .brand img { width: 34px; height: 34px; }
+    .nav-menu { display: flex; align-items: center; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
+    .nav-menu a { color: var(--ink); text-decoration: none; font-weight: 500; }
+    .nav-menu a:hover { color: var(--primary); }
+    .nav-actions { display: flex; align-items: center; gap: .5rem; }
+    .icon-btn {
+      background: var(--surface); color: var(--ink);
+      border: 1px solid var(--line); border-radius: var(--radius-sm);
+      min-width: 44px; height: 44px; font: 700 var(--text-sm)/1 var(--font-body);
+      cursor: pointer; padding: 0 .8rem;
+    }
+    .icon-btn:hover { border-color: var(--primary); }
+    .menu-toggle { display: none; }
+
+    /* ============================================================
+       5. HERO (Grid 2 kolom)
+       ============================================================ */
+    .hero { padding-top: clamp(2.5rem, 6vw, 4.5rem); }
+    .hero-grid {
+      display: grid; grid-template-columns: 1.3fr 1fr;
+      gap: clamp(1.5rem, 5vw, 4rem); align-items: center;
+    }
+    .hero h1 { font-size: var(--text-hero); font-weight: 800; letter-spacing: -0.03em; }
+    .hero h1 span { display: block; color: var(--primary); }
+    .hero-lead { font-size: var(--text-lg); color: var(--muted); }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
+    .hero-meta { margin: 1.5rem 0 0; padding: 0; list-style: none; color: var(--muted); font-size: var(--text-sm); }
+
+    .countdown-card {
+      background: var(--surface); border: 1px solid var(--line);
+      border-top: 6px solid var(--accent); border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .countdown-card h2 { font-size: var(--text-lg); margin-bottom: 1rem; }
+    .countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: 0; }
+    .countdown div { text-align: center; background: var(--bg); border-radius: var(--radius-sm); padding: .8rem .25rem; }
+    .countdown dt { font-size: var(--text-sm); color: var(--muted); order: 2; }
+    .countdown dd {
+      margin: 0; order: 1; font-family: var(--font-head); font-weight: 800;
+      font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1; font-variant-numeric: tabular-nums;
+    }
+    .countdown div { display: flex; flex-direction: column; gap: .35rem; }
+    .countdown-note { margin: 1rem 0 0; font-size: var(--text-sm); color: var(--muted); }
+
+    /* ============================================================
+       6. TENTANG & PEMBICARA (Grid kartu)
+       ============================================================ */
+    .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .card {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 1.5rem;
+    }
+    .card p { margin-bottom: 0; color: var(--muted); }
+    .card h3 { margin-bottom: .4rem; }
+
+    .speakers { background: var(--surface); border-block: 1px solid var(--line); }
+    .speaker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .speaker { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; }
+    .avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      display: grid; place-items: center; margin-bottom: 1rem;
+      font: 800 1.3rem var(--font-head);
+      background: var(--primary); color: var(--on-primary);
+    }
+    .speaker:nth-child(2) .avatar { background: var(--accent); color: var(--on-accent); }
+    .speaker p { margin: 0; color: var(--muted); font-size: var(--text-sm); }
+    .speaker .topic { color: var(--ink); font-weight: 700; font-size: var(--text-base); margin-top: .75rem; }
+
+    /* ============================================================
+       7. JADWAL (urutan waktu, jadi memang berurutan)
+       ============================================================ */
+    .schedule { list-style: none; margin: 0; padding: 0; max-width: 720px; }
+    .schedule li {
+      display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem;
+      padding: 1rem 0; border-bottom: 1px solid var(--line);
+    }
+    .schedule time { font-family: var(--font-head); font-weight: 800; color: var(--primary); }
+    .schedule strong { display: block; }
+    .schedule span { color: var(--muted); font-size: var(--text-sm); }
+
+    /* ============================================================
+       8. FORM PENDAFTARAN
+       ============================================================ */
+    .register { background: var(--surface); border-top: 1px solid var(--line); }
+    .register-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(1.5rem, 5vw, 4rem); align-items: start; }
+    .quota { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; }
+    .quota-number { font: 800 3rem/1 var(--font-head); margin: 0; }
+    .quota-number small { font-size: var(--text-base); font-weight: 500; color: var(--muted); }
+    progress { width: 100%; height: 12px; margin-top: 1rem; accent-color: var(--primary); }
+
+    form { display: grid; gap: 1.1rem; }
+    .field { display: grid; gap: .35rem; }
+    label { font-weight: 700; }
+    input[type="text"], input[type="email"], select {
+      width: 100%; font: inherit; color: var(--ink);
+      background: var(--bg); border: 2px solid var(--line);
+      border-radius: var(--radius-sm); padding: .75rem .9rem;
+    }
+    input:focus, select:focus { border-color: var(--primary); outline: none; }
+    [aria-invalid="true"] { border-color: var(--danger) !important; }
+    .error { color: var(--danger); font-size: var(--text-sm); min-height: 1.2em; margin: 0; }
+    .check { display: flex; gap: .6rem; align-items: flex-start; }
+    .check input { margin-top: .4rem; width: 1.1rem; height: 1.1rem; accent-color: var(--primary); }
+    .check label { font-weight: 400; }
+
+    /* ============================================================
+       9. MODAL (elemen <dialog>)
+       ============================================================ */
+    dialog {
+      border: none; border-radius: var(--radius); padding: 2rem;
+      width: min(92vw, 440px); background: var(--surface); color: var(--ink);
+    }
+    dialog::backdrop { background: rgba(10, 12, 35, .6); }
+    dialog h2 { font-size: var(--text-xl); }
+    .ticket {
+      background: var(--bg); border-left: 6px solid var(--success);
+      border-radius: var(--radius-sm); padding: 1rem; margin: 1rem 0 1.5rem;
+    }
+    .ticket p { margin: 0; }
+
+    /* ============================================================
+       10. FOOTER
+       ============================================================ */
+    .site-footer { border-top: 1px solid var(--line); padding-block: 2rem; color: var(--muted); font-size: var(--text-sm); }
+    .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
+    .site-footer p { margin: 0; }
+
+    /* ============================================================
+       11. RESPONSIF
+       ============================================================ */
+    @media (max-width: 860px) {
+      .hero-grid, .register-grid { grid-template-columns: 1fr; }
+      .about-grid, .speaker-grid { grid-template-columns: 1fr; }
+      .menu-toggle { display: inline-block; }
+      .nav-menu {
+        display: none; position: absolute; left: 0; right: 0; top: 100%;
+        flex-direction: column; align-items: flex-start; gap: 0;
+        background: var(--bg); border-bottom: 1px solid var(--line); padding: .5rem 1rem 1rem;
+      }
+      .nav-menu.open { display: flex; }
+      .nav-menu li { width: 100%; }
+      .nav-menu a { display: block; padding: .8rem 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Langsung ke konten</a>
+
+  <!-- ================= HEADER ================= -->
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand" href="#beranda" aria-label="Debug Day 2026, kembali ke atas">
+        <img alt="Logo Debug Day: tanda kurung kurawal berwarna biru"
+             src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%233B4BDB'/%3E%3Cpath d='M16 10c-4 0-4 3-4 6s0 4-3 4c3 0 3 1 3 4s0 6 4 6M24 10c4 0 4 3 4 6s0 4 3 4c-3 0-3 1-3 4s0 6-4 6' fill='none' stroke='%23FFB703' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+        Debug Day
+      </a>
+
+      <nav aria-label="Navigasi utama">
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="#tentang">Tentang</a></li>
+          <li><a href="#pembicara">Pembicara</a></li>
+          <li><a href="#jadwal">Jadwal</a></li>
+          <li><a href="#daftar">Daftar</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- INTERAKSI JS 1: toggle mode gelap/terang -->
+        <button type="button" class="icon-btn" id="theme-toggle" aria-pressed="false" aria-label="Aktifkan mode gelap">Gelap</button>
+        <!-- INTERAKSI JS 2: toggle menu di layar kecil -->
+        <button type="button" class="icon-btn menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-menu">Menu</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="beranda" aria-labelledby="judul-hero">
+      <div class="container hero-grid">
+        <div>
+          <h1 id="judul-hero">Debug Day <span>2026</span></h1>
+          <p class="hero-lead">Seminar dan workshop sehari untuk mahasiswa yang ingin membuat website sendiri, dan tahu cara memperbaikinya saat error.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#daftar">Daftar gratis</a>
+            <a class="btn btn-outline" href="#jadwal">Lihat jadwal</a>
+          </div>
+          <ul class="hero-meta">
+            <li>Sabtu, 28 November 2026, pukul 08.00 WIB</li>
+            <li>Aula Utama Kampus, Gedung A lantai 3</li>
+          </ul>
+        </div>
+
+        <!-- INTERAKSI JS 3: countdown (counter) -->
+        <aside class="countdown-card" aria-labelledby="judul-countdown">
+          <h2 id="judul-countdown">Acara dimulai dalam</h2>
+          <dl class="countdown" id="countdown" aria-live="off">
+            <div><dt>hari</dt><dd id="cd-days">00</dd></div>
+            <div><dt>jam</dt><dd id="cd-hours">00</dd></div>
+            <div><dt>menit</dt><dd id="cd-minutes">00</dd></div>
+            <div><dt>detik</dt><dd id="cd-seconds">00</dd></div>
+          </dl>
+          <p class="countdown-note" id="countdown-note">Hitung mundur menuju pembukaan acara.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= TENTANG ================= -->
+    <section id="tentang" aria-labelledby="judul-tentang">
+      <div class="container">
+        <h2 id="judul-tentang">Apa yang akan kamu dapat</h2>
+        <p class="section-intro">Debug Day diselenggarakan oleh UKM Himpunan Informatika. Cocok untuk pemula sampai yang sudah pernah ngoding.</p>
+        <div class="about-grid">
+          <article class="card">
+            <h3>Seminar</h3>
+            <p>Dua sesi bersama praktisi: cara berpikir saat mencari bug dan cara membangun portofolio web.</p>
+          </article>
+          <article class="card">
+            <h3>Workshop langsung praktik</h3>
+            <p>Bangun satu halaman web dari nol memakai HTML, CSS, dan JavaScript. Bawa laptop sendiri.</p>
+          </article>
+          <article class="card">
+            <h3>Sertifikat dan konsumsi</h3>
+            <p>Peserta mendapat e-sertifikat, makan siang, dan kesempatan konsultasi proyek dengan mentor.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PEMBICARA ================= -->
+    <section class="speakers" id="pembicara" aria-labelledby="judul-pembicara">
+      <div class="container">
+        <h2 id="judul-pembicara">Pembicara</h2>
+        <p class="section-intro">Nama dan data di bawah ini contoh. Ganti dengan data acaramu.</p>
+        <div class="speaker-grid">
+          <article class="speaker">
+            <div class="avatar" aria-hidden="true">AR</div>
+            <h3>Andi Rahman</h3>
+            <p>Front-end Engineer</p>
+            <p class="topic">Membaca pesan error tanpa panik</p>
+          </article>
+          <article class="speaker">
+            <div class="avatar" aria-hidden="true">SD</div>
+            <h3>Sari Dewanti</h3>
+            <p>UI Designer</p>
+            <p class="topic">Layout rapi dengan Flexbox dan Grid</p>
+          </article>
+          <article class="speaker">
+            <div class="avatar" aria-hidden="true">BP</div>
+            <h3>Budi Prakoso</h3>
+            <p>Dosen Teknik Informatika</p>
+            <p class="topic">Portofolio yang dilirik perekrut</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= JADWAL ================= -->
+    <section id="jadwal" aria-labelledby="judul-jadwal">
+      <div class="container">
+        <h2 id="judul-jadwal">Jadwal acara</h2>
+        <ol class="schedule">
+          <li><time datetime="2026-11-28T08:00">08.00</time><div><strong>Registrasi ulang</strong><span>Tunjukkan tiket digital di meja panitia</span></div></li>
+          <li><time datetime="2026-11-28T09:00">09.00</time><div><strong>Seminar 1: Membaca pesan error tanpa panik</strong><span>Andi Rahman</span></div></li>
+          <li><time datetime="2026-11-28T10:30">10.30</time><div><strong>Seminar 2: Portofolio yang dilirik perekrut</strong><span>Budi Prakoso</span></div></li>
+          <li><time datetime="2026-11-28T12:00">12.00</time><div><strong>Istirahat dan makan siang</strong><span>Disediakan panitia</span></div></li>
+          <li><time datetime="2026-11-28T13:00">13.00</time><div><strong>Workshop: bangun landing page pertamamu</strong><span>Sari Dewanti dan tim mentor</span></div></li>
+          <li><time datetime="2026-11-28T16:00">16.00</time><div><strong>Penutupan dan foto bersama</strong><span>Pembagian sertifikat</span></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================= DAFTAR ================= -->
+    <section class="register" id="daftar" aria-labelledby="judul-daftar">
+      <div class="container register-grid">
+        <div>
+          <h2 id="judul-daftar">Daftar sekarang</h2>
+          <p>Pendaftaran gratis. Satu email untuk satu tiket.</p>
+          <div class="quota">
+            <p class="quota-number"><span id="quota-left">120</span> <small>kursi tersisa dari 120</small></p>
+            <progress id="quota-bar" max="120" value="0" aria-label="Kursi yang sudah terisi"></progress>
+          </div>
+        </div>
+
+        <!-- INTERAKSI JS 4: validasi form + modal konfirmasi -->
+        <form id="register-form" novalidate>
+          <div class="field">
+            <label for="nama">Nama lengkap</label>
+            <input type="text" id="nama" name="nama" autocomplete="name" placeholder="Contoh: Rina Putri" required aria-describedby="err-nama">
+            <p class="error" id="err-nama" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="email">Email aktif</label>
+            <input type="email" id="email" name="email" autocomplete="email" placeholder="nama@email.com" required aria-describedby="err-email">
+            <p class="error" id="err-email" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="jurusan">Program studi</label>
+            <select id="jurusan" name="jurusan" required aria-describedby="err-jurusan">
+              <option value="">Pilih program studi</option>
+              <option>Informatika</option>
+              <option>Sistem Informasi</option>
+              <option>Teknik Elektro</option>
+              <option>Desain Komunikasi Visual</option>
+              <option>Lainnya</option>
+            </select>
+            <p class="error" id="err-jurusan" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <div class="check">
+              <input type="checkbox" id="setuju" name="setuju" required aria-describedby="err-setuju">
+              <label for="setuju">Saya akan hadir dan membawa laptop sendiri.</label>
+            </div>
+            <p class="error" id="err-setuju" role="alert"></p>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="submit-btn">Daftar dan ambil tiket</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= MODAL KONFIRMASI ================= -->
+  <dialog id="success-modal" aria-labelledby="modal-title">
+    <h2 id="modal-title">Pendaftaran berhasil</h2>
+    <p>Terima kasih, <strong id="modal-name"></strong>. Tiketmu sudah dikirim ke email berikut.</p>
+    <div class="ticket">
+      <p id="modal-email"></p>
+      <p>Sabtu, 28 November 2026, 08.00 WIB</p>
+    </div>
+    <button type="button" class="btn btn-primary" id="modal-close">Selesai</button>
+  </dialog>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 UKM Himpunan Informatika. Dibuat sebagai tugas mandiri.</p>
+      <p>Kontak: <a href="mailto:panitia@debugday.example">panitia@debugday.example</a></p>
+    </div>
+  </footer>
+
+  <script>
+    "use strict";
+
+    /* ============================================================
+       INTERAKSI 1: Toggle mode gelap/terang
+       ============================================================ */
+    const root = document.documentElement;
+    const themeBtn = document.getElementById("theme-toggle");
+
+    function setTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      const isDark = theme === "dark";
+      themeBtn.setAttribute("aria-pressed", String(isDark));
+      themeBtn.setAttribute("aria-label", isDark ? "Aktifkan mode terang" : "Aktifkan mode gelap");
+      themeBtn.textContent = isDark ? "Terang" : "Gelap";
+    }
+    // Awal: ikuti pengaturan perangkat
+    setTheme(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    themeBtn.addEventListener("click", () => {
+      setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+    });
+
+    /* ============================================================
+       INTERAKSI 2: Toggle menu navigasi (layar kecil)
+       ============================================================ */
+    const menuBtn = document.getElementById("menu-toggle");
+    const menu = document.getElementById("nav-menu");
+
+    menuBtn.addEventListener("click", () => {
+      const open = menu.classList.toggle("open");
+      menuBtn.setAttribute("aria-expanded", String(open));
+    });
+    // Tutup menu setelah salah satu tautan diklik
+    menu.addEventListener("click", (e) => {
+      if (e.target.tagName === "A") {
+        menu.classList.remove("open");
+        menuBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    /* ============================================================
+       INTERAKSI 3: Countdown menuju hari acara
+       ============================================================ */
+    const EVENT_DATE = new Date("2026-11-28T08:00:00+07:00"); // ubah sesuai acaramu
+    const cd = {
+      days: document.getElementById("cd-days"),
+      hours: document.getElementById("cd-hours"),
+      minutes: document.getElementById("cd-minutes"),
+      seconds: document.getElementById("cd-seconds"),
+    };
+    const cdNote = document.getElementById("countdown-note");
+    const pad = (n) => String(n).padStart(2, "0");
+
+    function updateCountdown() {
+      const diff = EVENT_DATE - new Date();
+      if (diff <= 0) {
+        Object.values(cd).forEach((el) => (el.textContent = "00"));
+        cdNote.textContent = "Acara sudah dimulai atau selesai. Sampai jumpa di acara berikutnya.";
+        clearInterval(cdTimer);
+        return;
+      }
+      const totalSeconds = Math.floor(diff / 1000);
+      cd.days.textContent = pad(Math.floor(totalSeconds / 86400));
+      cd.hours.textContent = pad(Math.floor((totalSeconds % 86400) / 3600));
+      cd.minutes.textContent = pad(Math.floor((totalSeconds % 3600) / 60));
+      cd.seconds.textContent = pad(totalSeconds % 60);
+    }
+    updateCountdown();
+    const cdTimer = setInterval(updateCountdown, 1000);
+
+    /* ============================================================
+       INTERAKSI 4: Validasi form + modal konfirmasi + counter kuota
+       ============================================================ */
+    const TOTAL_QUOTA = 120;
+    let quotaLeft = 87; // contoh: sebagian kursi sudah terisi
+
+    const form = document.getElementById("register-form");
+    const submitBtn = document.getElementById("submit-btn");
+    const quotaText = document.getElementById("quota-left");
+    const quotaBar = document.getElementById("quota-bar");
+    const modal = document.getElementById("success-modal");
+
+    function renderQuota() {
+      quotaText.textContent = quotaLeft;
+      quotaBar.value = TOTAL_QUOTA - quotaLeft;
+      if (quotaLeft <= 0) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Kursi sudah penuh";
+      }
+    }
+    renderQuota();
+
+    // Aturan validasi tiap kolom: mengembalikan pesan error, atau "" jika valid
+    const rules = {
+      nama(value) {
+        if (!value.trim()) return "Nama wajib diisi.";
+        if (value.trim().length < 3) return "Nama minimal 3 huruf.";
+        return "";
+      },
+      email(value) {
+        if (!value.trim()) return "Email wajib diisi.";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim())) return "Format email belum benar. Contoh: nama@email.com";
+        return "";
+      },
+      jurusan(value) {
+        return value ? "" : "Pilih salah satu program studi.";
+      },
+      setuju(_value, field) {
+        return field.checked ? "" : "Centang untuk melanjutkan.";
+      },
+    };
+
+    function validateField(field) {
+      const message = rules[field.name](field.value, field);
+      const errorEl = document.getElementById("err-" + field.name);
+      errorEl.textContent = message;
+      field.setAttribute("aria-invalid", message ? "true" : "false");
+      return message === "";
+    }
+
+    // Cek ulang saat pengguna mengetik atau berpindah kolom
+    form.querySelectorAll("input, select").forEach((field) => {
+      field.addEventListener("blur", () => validateField(field));
+      field.addEventListener("input", () => {
+        if (field.getAttribute("aria-invalid") === "true") validateField(field);
+      });
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault(); // cegah halaman reload
+      const fields = [...form.querySelectorAll("input, select")];
+      const results = fields.map(validateField); // validasi semua kolom
+      const firstInvalid = fields.find((_, i) => !results[i]);
+
+      if (firstInvalid) {
+        firstInvalid.focus(); // arahkan ke kolom pertama yang salah
+        return;
+      }
+
+      // Semua valid: kurangi kuota dan tampilkan modal
+      quotaLeft -= 1;
+      renderQuota();
+      document.getElementById("modal-name").textContent = form.nama.value.trim();
+      document.getElementById("modal-email").textContent = form.email.value.trim();
+      modal.showModal();
+      form.reset();
+      fields.forEach((f) => f.removeAttribute("aria-invalid"));
+    });
+
+    // Tutup modal: tombol, klik di luar kotak, atau tombol Esc (bawaan dialog)
+    document.getElementById("modal-close").addEventListener("click", () => modal.close());
+    modal.addEventListener("click", (e) => {
+      const box = modal.getBoundingClientRect();
+      const inside = e.clientX >= box.left && e.clientX <= box.right &&
+                     e.clientY >= box.top && e.clientY <= box.bottom;
+      if (!inside) modal.close(); // klik di area gelap luar kotak
+    });
+  </script>
+</body>
+</html>
