@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Debug Day 2026: seminar dan workshop web development untuk mahasiswa, diselenggarakan oleh UKM Himpunan Informatika.">
+  <script>document.documentElement.classList.add("js");</script>
+  <title>Debug Day 2026 | Seminar &amp; Workshop Web Development</title>
+
+  <!-- Font: Bricolage Grotesque (judul) + Figtree (isi). Ada fallback jika offline. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Langsung ke konten</a>
+
+  <!-- ================= HEADER ================= -->
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand" href="#beranda" aria-label="Debug Day 2026, kembali ke atas">
+        <img alt="Logo Debug Day: tanda kurung kurawal berwarna biru"
+             src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%233B4BDB'/%3E%3Cpath d='M16 10c-4 0-4 3-4 6s0 4-3 4c3 0 3 1 3 4s0 6 4 6M24 10c4 0 4 3 4 6s0 4 3 4c-3 0-3 1-3 4s0 6-4 6' fill='none' stroke='%23FFB703' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+        Debug Day
+      </a>
+
+      <nav aria-label="Navigasi utama">
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="#tentang">Tentang</a></li>
+          <li><a href="#pembicara">Pembicara</a></li>
+          <li><a href="#jadwal">Jadwal</a></li>
+          <li><a href="#daftar">Daftar</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- INTERAKSI JS 1: toggle mode gelap/terang -->
+        <button type="button" class="icon-btn" id="theme-toggle" aria-pressed="false" aria-label="Aktifkan mode gelap">Gelap</button>
+        <!-- INTERAKSI JS 2: toggle menu di layar kecil -->
+        <button type="button" class="icon-btn menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-menu">Menu</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ================= HERO ================= -->
+    <section class="hero" id="beranda" aria-labelledby="judul-hero">
+      <div class="container hero-grid">
+        <div>
+          <h1 id="judul-hero">Debug Day <span>2026</span></h1>
+          <p class="hero-lead">Seminar dan workshop sehari untuk mahasiswa yang ingin membuat website sendiri, dan tahu cara memperbaikinya saat error.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#daftar">Daftar gratis</a>
+            <a class="btn btn-outline" href="#jadwal">Lihat jadwal</a>
+          </div>
+          <ul class="hero-meta">
+            <li>Sabtu, 28 November 2026, pukul 08.00 WIB</li>
+            <li>Aula Utama Kampus, Gedung A lantai 3</li>
+          </ul>
+        </div>
+
+        <!-- INTERAKSI JS 3: countdown (counter) -->
+        <aside class="countdown-card" aria-labelledby="judul-countdown">
+          <h2 id="judul-countdown">Acara dimulai dalam</h2>
+          <dl class="countdown" id="countdown" aria-live="off">
+            <div><dt>hari</dt><dd id="cd-days">00</dd></div>
+            <div><dt>jam</dt><dd id="cd-hours">00</dd></div>
+            <div><dt>menit</dt><dd id="cd-minutes">00</dd></div>
+            <div><dt>detik</dt><dd id="cd-seconds">00</dd></div>
+          </dl>
+          <p class="countdown-note" id="countdown-note">Hitung mundur menuju pembukaan acara.</p>
+          <noscript><p class="countdown-note">Hitung mundur tidak tampil karena JavaScript nonaktif. Acara: Sabtu, 28 November 2026, 08.00 WIB.</p></noscript>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= TENTANG ================= -->
+    <section id="tentang" aria-labelledby="judul-tentang">
+      <div class="container">
+        <h2 id="judul-tentang">Apa yang akan kamu dapat</h2>
+        <p class="section-intro">Debug Day diselenggarakan oleh UKM Himpunan Informatika. Cocok untuk pemula sampai yang sudah pernah ngoding.</p>
+        <div class="about-grid">
+          <article class="card">
+            <h3>Seminar</h3>
+            <p>Dua sesi bersama praktisi: cara berpikir saat mencari bug dan cara membangun portofolio web.</p>
+          </article>
+          <article class="card">
+            <h3>Workshop langsung praktik</h3>
+            <p>Bangun satu halaman web dari nol memakai HTML, CSS, dan JavaScript. Bawa laptop sendiri.</p>
+          </article>
+          <article class="card">
+            <h3>Sertifikat dan konsumsi</h3>
+            <p>Peserta mendapat e-sertifikat, makan siang, dan kesempatan konsultasi proyek dengan mentor.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PEMBICARA ================= -->
+    <section class="speakers" id="pembicara" aria-labelledby="judul-pembicara">
+      <div class="container">
+        <h2 id="judul-pembicara">Pembicara</h2>
+        <p class="section-intro">Nama dan data di bawah ini contoh. Ganti dengan data acaramu.</p>
+        <div class="speaker-grid">
+          <article class="speaker">
+            <div class="avatar" aria-hidden="true">AR</div>
+            <h3>Andi Rahman</h3>
+            <p>Front-end Engineer</p>
+            <p class="topic">Membaca pesan error tanpa panik</p>
+          </article>
+          <article class="speaker">
+            <div class="avatar" aria-hidden="true">SD</div>
+            <h3>Sari Dewanti</h3>
+            <p>UI Designer</p>
+            <p class="topic">Layout rapi dengan Flexbox dan Grid</p>
+          </article>
+          <article class="speaker">
+            <div class="avatar" aria-hidden="true">BP</div>
+            <h3>Budi Prakoso</h3>
+            <p>Dosen Teknik Informatika</p>
+            <p class="topic">Portofolio yang dilirik perekrut</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= JADWAL ================= -->
+    <section id="jadwal" aria-labelledby="judul-jadwal">
+      <div class="container">
+        <h2 id="judul-jadwal">Jadwal acara</h2>
+        <ol class="schedule">
+          <li><time datetime="2026-11-28T08:00">08.00</time><div><strong>Registrasi ulang</strong><span>Tunjukkan tiket digital di meja panitia</span></div></li>
+          <li><time datetime="2026-11-28T09:00">09.00</time><div><strong>Seminar 1: Membaca pesan error tanpa panik</strong><span>Andi Rahman</span></div></li>
+          <li><time datetime="2026-11-28T10:30">10.30</time><div><strong>Seminar 2: Portofolio yang dilirik perekrut</strong><span>Budi Prakoso</span></div></li>
+          <li><time datetime="2026-11-28T12:00">12.00</time><div><strong>Istirahat dan makan siang</strong><span>Disediakan panitia</span></div></li>
+          <li><time datetime="2026-11-28T13:00">13.00</time><div><strong>Workshop: bangun landing page pertamamu</strong><span>Sari Dewanti dan tim mentor</span></div></li>
+          <li><time datetime="2026-11-28T16:00">16.00</time><div><strong>Penutupan dan foto bersama</strong><span>Pembagian sertifikat</span></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================= DAFTAR ================= -->
+    <section class="register" id="daftar" aria-labelledby="judul-daftar">
+      <div class="container register-grid">
+        <div>
+          <h2 id="judul-daftar">Daftar sekarang</h2>
+          <p>Pendaftaran gratis. Satu email untuk satu tiket.</p>
+          <div class="quota">
+            <p class="quota-number"><span id="quota-left">120</span> <small>kursi tersisa dari 120</small></p>
+            <progress id="quota-bar" max="120" value="0" aria-label="Kursi yang sudah terisi"></progress>
+          </div>
+        </div>
+
+        <!-- INTERAKSI JS 4: validasi form + modal konfirmasi -->
+        <form id="register-form" novalidate>
+          <div class="field">
+            <label for="nama">Nama lengkap</label>
+            <input type="text" id="nama" name="nama" autocomplete="name" placeholder="Contoh: Rina Putri" required aria-describedby="err-nama">
+            <p class="error" id="err-nama" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="email">Email aktif</label>
+            <input type="email" id="email" name="email" autocomplete="email" placeholder="nama@email.com" required aria-describedby="err-email">
+            <p class="error" id="err-email" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="jurusan">Program studi</label>
+            <select id="jurusan" name="jurusan" required aria-describedby="err-jurusan">
+              <option value="">Pilih program studi</option>
+              <option>Informatika</option>
+              <option>Sistem Informasi</option>
+              <option>Teknik Elektro</option>
+              <option>Desain Komunikasi Visual</option>
+              <option>Lainnya</option>
+            </select>
+            <p class="error" id="err-jurusan" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <div class="check">
+              <input type="checkbox" id="setuju" name="setuju" required aria-describedby="err-setuju">
+              <label for="setuju">Saya akan hadir dan membawa laptop sendiri.</label>
+            </div>
+            <p class="error" id="err-setuju" role="alert"></p>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="submit-btn">Daftar dan ambil tiket</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= MODAL KONFIRMASI ================= -->
+  <dialog id="success-modal" aria-labelledby="modal-title">
+    <h2 id="modal-title">Pendaftaran berhasil</h2>
+    <p>Terima kasih, <strong id="modal-name"></strong>. Tiketmu sudah dikirim ke email berikut.</p>
+    <div class="ticket">
+      <p id="modal-email"></p>
+      <p>Sabtu, 28 November 2026, 08.00 WIB</p>
+    </div>
+    <button type="button" class="btn btn-primary" id="modal-close">Selesai</button>
+  </dialog>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 UKM Himpunan Informatika. Dibuat sebagai tugas mandiri.</p>
+      <p>Kontak: <a href="mailto:panitia@debugday.example">panitia@debugday.example</a></p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

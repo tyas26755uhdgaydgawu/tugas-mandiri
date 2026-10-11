@@ -1,0 +1,279 @@
+/* ============================================================
+   1. DESIGN TOKENS: palet warna, tipografi, jarak
+   ============================================================ */
+:root {
+  /* Palet warna (terang) */
+  --bg: #F6F6F1;
+  --surface: #FFFFFF;
+  --ink: #16193A;
+  --muted: #565A78;
+  --primary: #3B4BDB;
+  --on-primary: #FFFFFF;
+  --accent: #FFB703;
+  --on-accent: #16193A;
+  --line: #DCDDE6;
+  --danger: #B3261E;
+  --success: #1B7F4B;
+
+  /* Tipografi */
+  --font-head: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+
+  /* Skala ukuran teks */
+  --text-sm: 0.9rem;
+  --text-base: 1.05rem;
+  --text-lg: 1.25rem;
+  --text-xl: clamp(1.6rem, 3vw, 2.2rem);
+  --text-hero: clamp(2.6rem, 8vw, 5.2rem);
+
+  /* Jarak & bentuk */
+  --space: 1rem;
+  --section-y: clamp(3.5rem, 8vw, 6rem);
+  --radius: 14px;
+  --radius-sm: 8px;
+  --maxw: 1080px;
+}
+
+/* Palet warna (gelap), diaktifkan lewat tombol toggle */
+[data-theme="dark"] {
+  --bg: #11132B;
+  --surface: #1B1E3F;
+  --ink: #EEF0FF;
+  --muted: #A7ABCB;
+  --primary: #939DFF;
+  --on-primary: #11132B;
+  --accent: #FFC933;
+  --on-accent: #11132B;
+  --line: #2E3262;
+  --danger: #FF8A80;
+  --success: #6FD9A0;
+}
+
+/* ============================================================
+   2. RESET & DASAR
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--bg);
+  transition: background-color .25s, color .25s;
+}
+img { max-width: 100%; display: block; }
+h1, h2, h3 { font-family: var(--font-head); line-height: 1.1; margin: 0 0 .6em; }
+h2 { font-size: var(--text-xl); font-weight: 800; letter-spacing: -0.01em; }
+h3 { font-size: var(--text-lg); font-weight: 600; }
+p { margin: 0 0 1em; max-width: 62ch; }
+a { color: var(--primary); }
+
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+.container { width: min(100% - 2rem, var(--maxw)); margin-inline: auto; }
+section { padding-block: var(--section-y); }
+.section-intro { color: var(--muted); margin-bottom: 2rem; }
+.skip-link {
+  position: absolute; left: -999px; top: 0; background: var(--accent);
+  color: var(--on-accent); padding: .6rem 1rem; z-index: 100;
+}
+.skip-link:focus { left: 0; }
+
+/* ============================================================
+   3. KOMPONEN: tombol
+   ============================================================ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font: 700 var(--text-base)/1 var(--font-body);
+  padding: .9rem 1.4rem; border-radius: var(--radius-sm);
+  border: 2px solid transparent; cursor: pointer; text-decoration: none;
+  transition: transform .15s, background-color .2s;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--primary); color: var(--on-primary); }
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+.btn-outline { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn-outline:hover { border-color: var(--primary); }
+
+/* ============================================================
+   4. HEADER & NAVIGASI (Flexbox)
+   ============================================================ */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.nav-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding-block: .75rem;
+}
+.brand {
+  display: flex; align-items: center; gap: .6rem;
+  font-family: var(--font-head); font-weight: 800; font-size: 1.2rem;
+  color: var(--ink); text-decoration: none;
+}
+.brand img { width: 34px; height: 34px; }
+.nav-menu { display: flex; align-items: center; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
+.nav-menu a { color: var(--ink); text-decoration: none; font-weight: 500; }
+.nav-menu a:hover { color: var(--primary); }
+.nav-actions { display: flex; align-items: center; gap: .5rem; }
+.icon-btn {
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  min-width: 44px; height: 44px; font: 700 var(--text-sm)/1 var(--font-body);
+  cursor: pointer; padding: 0 .8rem;
+}
+.icon-btn:hover { border-color: var(--primary); }
+.menu-toggle { display: none; }
+
+/* ============================================================
+   5. HERO (Grid 2 kolom)
+   ============================================================ */
+.hero { padding-top: clamp(2.5rem, 6vw, 4.5rem); }
+.hero-grid {
+  display: grid; grid-template-columns: 1.3fr 1fr;
+  gap: clamp(1.5rem, 5vw, 4rem); align-items: center;
+}
+.hero h1 { font-size: var(--text-hero); font-weight: 800; letter-spacing: -0.03em; }
+.hero h1 span { display: block; color: var(--primary); }
+.hero-lead { font-size: var(--text-lg); color: var(--muted); }
+.hero-cta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
+.hero-meta { margin: 1.5rem 0 0; padding: 0; list-style: none; color: var(--muted); font-size: var(--text-sm); }
+
+.countdown-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-top: 6px solid var(--accent); border-radius: var(--radius);
+  padding: 1.5rem;
+}
+.countdown-card h2 { font-size: var(--text-lg); margin-bottom: 1rem; }
+.countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: 0; }
+.countdown div { text-align: center; background: var(--bg); border-radius: var(--radius-sm); padding: .8rem .25rem; }
+.countdown dt { font-size: var(--text-sm); color: var(--muted); order: 2; }
+.countdown dd {
+  margin: 0; order: 1; font-family: var(--font-head); font-weight: 800;
+  font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1; font-variant-numeric: tabular-nums;
+}
+.countdown div { display: flex; flex-direction: column; gap: .35rem; }
+.countdown-note { margin: 1rem 0 0; font-size: var(--text-sm); color: var(--muted); }
+
+/* ============================================================
+   6. TENTANG & PEMBICARA (Grid kartu)
+   ============================================================ */
+.about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 1.5rem;
+}
+.card p { margin-bottom: 0; color: var(--muted); }
+.card h3 { margin-bottom: .4rem; }
+
+.speakers { background: var(--surface); border-block: 1px solid var(--line); }
+.speaker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.speaker { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; }
+.avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: grid; place-items: center; margin-bottom: 1rem;
+  font: 800 1.3rem var(--font-head);
+  background: var(--primary); color: var(--on-primary);
+}
+.speaker:nth-child(2) .avatar { background: var(--accent); color: var(--on-accent); }
+.speaker p { margin: 0; color: var(--muted); font-size: var(--text-sm); }
+.speaker .topic { color: var(--ink); font-weight: 700; font-size: var(--text-base); margin-top: .75rem; }
+
+/* ============================================================
+   7. JADWAL (urutan waktu, jadi memang berurutan)
+   ============================================================ */
+.schedule { list-style: none; margin: 0; padding: 0; max-width: 720px; }
+.schedule li {
+  display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem;
+  padding: 1rem 0; border-bottom: 1px solid var(--line);
+}
+.schedule time { font-family: var(--font-head); font-weight: 800; color: var(--primary); }
+.schedule strong { display: block; }
+.schedule span { color: var(--muted); font-size: var(--text-sm); }
+
+/* ============================================================
+   8. FORM PENDAFTARAN
+   ============================================================ */
+.register { background: var(--surface); border-top: 1px solid var(--line); }
+.register-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(1.5rem, 5vw, 4rem); align-items: start; }
+.quota { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; }
+.quota-number { font: 800 3rem/1 var(--font-head); margin: 0; }
+.quota-number small { font-size: var(--text-base); font-weight: 500; color: var(--muted); }
+progress { width: 100%; height: 12px; margin-top: 1rem; accent-color: var(--primary); }
+
+form { display: grid; gap: 1.1rem; }
+.field { display: grid; gap: .35rem; }
+label { font-weight: 700; }
+input[type="text"], input[type="email"], select {
+  width: 100%; font: inherit; color: var(--ink);
+  background: var(--bg); border: 2px solid var(--line);
+  border-radius: var(--radius-sm); padding: .75rem .9rem;
+}
+input:focus, select:focus { border-color: var(--primary); outline: none; }
+[aria-invalid="true"] { border-color: var(--danger) !important; }
+.error { color: var(--danger); font-size: var(--text-sm); min-height: 1.2em; margin: 0; }
+.check { display: flex; gap: .6rem; align-items: flex-start; }
+.check input { margin-top: .4rem; width: 1.1rem; height: 1.1rem; accent-color: var(--primary); }
+.check label { font-weight: 400; }
+
+/* ============================================================
+   9. MODAL (elemen <dialog>)
+   ============================================================ */
+dialog {
+  border: none; border-radius: var(--radius); padding: 2rem;
+  width: min(92vw, 440px); background: var(--surface); color: var(--ink);
+}
+dialog::backdrop { background: rgba(10, 12, 35, .6); }
+dialog h2 { font-size: var(--text-xl); }
+.ticket {
+  background: var(--bg); border-left: 6px solid var(--success);
+  border-radius: var(--radius-sm); padding: 1rem; margin: 1rem 0 1.5rem;
+}
+.ticket p { margin: 0; }
+
+/* ============================================================
+   10. FOOTER
+   ============================================================ */
+.site-footer { border-top: 1px solid var(--line); padding-block: 2rem; color: var(--muted); font-size: var(--text-sm); }
+.footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
+.site-footer p { margin: 0; }
+
+/* ============================================================
+   11. RESPONSIF
+   ============================================================ */
+@media (max-width: 860px) {
+  .hero-grid, .register-grid { grid-template-columns: 1fr; }
+  .about-grid, .speaker-grid { grid-template-columns: 1fr; }
+  .nav-bar { flex-wrap: wrap; }
+
+  /* Tanpa JavaScript: menu tampil sebagai baris tautan di bawah logo */
+  html:not(.js) nav { order: 3; width: 100%; }
+  html:not(.js) .nav-menu { flex-wrap: wrap; gap: .25rem 1.25rem; }
+
+  /* Dengan JavaScript: menu jadi hamburger */
+  .js .menu-toggle { display: inline-block; }
+  .js .nav-menu {
+    display: none; position: absolute; left: 0; right: 0; top: 100%;
+    flex-direction: column; align-items: flex-start; gap: 0;
+    background: var(--bg); border-bottom: 1px solid var(--line); padding: .5rem 1rem 1rem;
+  }
+  .js .nav-menu.open { display: flex; }
+  .js .nav-menu li { width: 100%; }
+  .js .nav-menu a { display: block; padding: .8rem 0; }
+}
+@media (max-width: 420px) {
+  .brand { font-size: 1.05rem; }
+  .countdown dd { font-size: 1.6rem; }
+}
+/* Fitur yang butuh JavaScript disembunyikan bila JS tidak jalan */
+html:not(.js) #theme-toggle,
+html:not(.js) .countdown { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
